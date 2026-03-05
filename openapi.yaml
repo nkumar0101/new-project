@@ -1,0 +1,381 @@
+openapi: 3.0.3
+info:
+  title: ShopEasy Ecommerce API
+  version: 1.0.0
+  description: REST API for managing products, orders, and checkout for the ShopEasy ecommerce application.
+
+servers:
+  - url: https://new-project-azure-five.vercel.app
+    description: Production
+
+tags:
+  - name: Products
+    description: Create, read, update, and delete products
+  - name: Orders
+    description: Retrieve orders
+  - name: Checkout
+    description: Fake checkout and order creation
+
+paths:
+  /api/products:
+    get:
+      tags: [Products]
+      summary: List all products
+      operationId: getProducts
+      responses:
+        '200':
+          description: Array of all products
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Product'
+
+    post:
+      tags: [Products]
+      summary: Create a product
+      operationId: createProduct
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductInput'
+            example:
+              name: Wireless Headphones
+              description: High-quality noise-cancelling headphones
+              price: 79.99
+              stock: 50
+              category: Electronics
+              image: https://placehold.co/300x200?text=Headphones
+      responses:
+        '201':
+          description: Product created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+        '400':
+          description: Missing required fields
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /api/products/{id}:
+    parameters:
+      - $ref: '#/components/parameters/Id'
+
+    get:
+      tags: [Products]
+      summary: Get a product by ID
+      operationId: getProduct
+      responses:
+        '200':
+          description: Product found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+    put:
+      tags: [Products]
+      summary: Update a product
+      operationId: updateProduct
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductInput'
+      responses:
+        '200':
+          description: Product updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+    delete:
+      tags: [Products]
+      summary: Delete a product
+      operationId: deleteProduct
+      responses:
+        '200':
+          description: Product deleted
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Product deleted
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+  /api/orders:
+    get:
+      tags: [Orders]
+      summary: List all orders
+      operationId: getOrders
+      responses:
+        '200':
+          description: Array of all orders
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Order'
+
+  /api/orders/{id}:
+    parameters:
+      - $ref: '#/components/parameters/Id'
+
+    get:
+      tags: [Orders]
+      summary: Get an order by ID
+      operationId: getOrder
+      responses:
+        '200':
+          description: Order found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+  /api/checkout:
+    post:
+      tags: [Checkout]
+      summary: Place an order (fake checkout)
+      operationId: checkout
+      description: >
+        Validates cart items against current stock, simulates payment processing
+        (90% success rate), deducts stock on success, and creates an order record.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CheckoutInput'
+            example:
+              customer:
+                name: Jane Smith
+                email: jane@example.com
+                address: 123 Main St, New York 10001
+              paymentMethod: credit_card
+              items:
+                - productId: 697e5563-5eed-45db-be7c-b543a102641b
+                  quantity: 2
+      responses:
+        '201':
+          description: Order created (check paymentStatus for success/failure)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+        '400':
+          description: Empty cart, missing customer info, product not found, or insufficient stock
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+components:
+  parameters:
+    Id:
+      name: id
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+      description: Resource UUID
+
+  responses:
+    NotFound:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+
+  schemas:
+    Product:
+      type: object
+      required: [id, name, price, stock, category, image]
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: 697e5563-5eed-45db-be7c-b543a102641b
+        name:
+          type: string
+          example: Wireless Headphones
+        description:
+          type: string
+          example: High-quality noise-cancelling headphones
+        price:
+          type: number
+          format: float
+          minimum: 0
+          example: 79.99
+        stock:
+          type: integer
+          minimum: 0
+          example: 50
+        category:
+          type: string
+          enum: [General, Electronics, Clothing, Footwear, Kitchen, Books, Sports, Toys]
+          example: Electronics
+        image:
+          type: string
+          format: uri
+          example: https://placehold.co/300x200?text=Headphones
+
+    ProductInput:
+      type: object
+      required: [name, price]
+      properties:
+        name:
+          type: string
+          example: Wireless Headphones
+        description:
+          type: string
+          example: High-quality noise-cancelling headphones
+        price:
+          type: number
+          format: float
+          minimum: 0
+          example: 79.99
+        stock:
+          type: integer
+          minimum: 0
+          default: 0
+          example: 50
+        category:
+          type: string
+          enum: [General, Electronics, Clothing, Footwear, Kitchen, Books, Sports, Toys]
+          default: General
+          example: Electronics
+        image:
+          type: string
+          format: uri
+          example: https://placehold.co/300x200?text=Headphones
+
+    CheckoutInput:
+      type: object
+      required: [items, customer]
+      properties:
+        items:
+          type: array
+          minItems: 1
+          items:
+            type: object
+            required: [productId, quantity]
+            properties:
+              productId:
+                type: string
+                format: uuid
+                example: 697e5563-5eed-45db-be7c-b543a102641b
+              quantity:
+                type: integer
+                minimum: 1
+                example: 2
+        customer:
+          type: object
+          required: [name, email]
+          properties:
+            name:
+              type: string
+              example: Jane Smith
+            email:
+              type: string
+              format: email
+              example: jane@example.com
+            address:
+              type: string
+              example: 123 Main St, New York 10001
+        paymentMethod:
+          type: string
+          enum: [credit_card, debit_card, paypal]
+          default: credit_card
+          example: credit_card
+
+    Order:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: a1b2c3d4-e5f6-7890-abcd-ef1234567890
+        customer:
+          type: object
+          properties:
+            name:
+              type: string
+              example: Jane Smith
+            email:
+              type: string
+              format: email
+              example: jane@example.com
+            address:
+              type: string
+              example: 123 Main St, New York 10001
+        items:
+          type: array
+          items:
+            type: object
+            properties:
+              productId:
+                type: string
+                format: uuid
+              name:
+                type: string
+                example: Wireless Headphones
+              price:
+                type: number
+                format: float
+                example: 79.99
+              quantity:
+                type: integer
+                example: 2
+              subtotal:
+                type: number
+                format: float
+                example: 159.98
+        total:
+          type: number
+          format: float
+          example: 159.98
+        paymentMethod:
+          type: string
+          enum: [credit_card, debit_card, paypal]
+          example: credit_card
+        paymentStatus:
+          type: string
+          enum: [success, failed]
+          example: success
+        status:
+          type: string
+          enum: [confirmed, payment_failed]
+          example: confirmed
+        createdAt:
+          type: string
+          format: date-time
+          example: '2026-03-05T12:00:00.000Z'
+
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+          example: Product not found

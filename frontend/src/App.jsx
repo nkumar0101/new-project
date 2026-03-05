@@ -37,25 +37,25 @@ export default function App() {
   const cartCount = cart.reduce((sum, i) => sum + i.quantity, 0);
 
   return (
-    <div className="app">
-      <header className="header">
+    <div className="app" data-testid="app">
+      <header className="header" data-testid="header">
         <div className="header-inner">
-          <NavLink to="/" className="logo">ShopEasy</NavLink>
-          <nav className="nav">
-            <NavLink to="/" className={({ isActive }) => isActive ? 'nav-link active' : 'nav-link'} end>
+          <NavLink to="/" className="logo" data-testid="nav-logo">ShopEasy</NavLink>
+          <nav className="nav" data-testid="nav">
+            <NavLink to="/" className={({ isActive }) => isActive ? 'nav-link active' : 'nav-link'} end data-testid="nav-products">
               Products
             </NavLink>
-            <NavLink to="/orders" className={({ isActive }) => isActive ? 'nav-link active' : 'nav-link'}>
+            <NavLink to="/orders" className={({ isActive }) => isActive ? 'nav-link active' : 'nav-link'} data-testid="nav-orders">
               Orders
             </NavLink>
-            <NavLink to="/cart" className={({ isActive }) => isActive ? 'nav-link cart-link active' : 'nav-link cart-link'}>
-              Cart {cartCount > 0 && <span className="cart-badge">{cartCount}</span>}
+            <NavLink to="/cart" className={({ isActive }) => isActive ? 'nav-link cart-link active' : 'nav-link cart-link'} data-testid="nav-cart">
+              Cart {cartCount > 0 && <span className="cart-badge" data-testid="cart-badge">{cartCount}</span>}
             </NavLink>
           </nav>
         </div>
       </header>
 
-      <main className="main">
+      <main className="main" data-testid="main">
         <Routes>
           <Route path="/" element={<ProductsPage addToCart={addToCart} />} />
           <Route path="/cart" element={<CartPage cart={cart} updateCartItem={updateCartItem} />} />
