@@ -19,6 +19,15 @@ export const api = {
   deleteProduct: (id) =>
     fetch(`${BASE}/products/${id}`, { method: 'DELETE' }).then(r => r.json()),
 
+  // Reviews
+  getReviews: (productId) => fetch(`${BASE}/products/${productId}/reviews`).then(r => r.json()),
+  createReview: (productId, data) =>
+    fetch(`${BASE}/products/${productId}/reviews`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+    }).then(r => r.json()),
+
   // Orders
   getOrders: () => fetch(`${BASE}/orders`).then(r => r.json()),
   getOrder: (id) => fetch(`${BASE}/orders/${id}`).then(r => r.json()),
