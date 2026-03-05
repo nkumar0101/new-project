@@ -1,0 +1,33 @@
+const BASE = '/api';
+
+export const api = {
+  // Products
+  getProducts: () => fetch(`${BASE}/products`).then(r => r.json()),
+  getProduct: (id) => fetch(`${BASE}/products/${id}`).then(r => r.json()),
+  createProduct: (data) =>
+    fetch(`${BASE}/products`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+    }).then(r => r.json()),
+  updateProduct: (id, data) =>
+    fetch(`${BASE}/products/${id}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+    }).then(r => r.json()),
+  deleteProduct: (id) =>
+    fetch(`${BASE}/products/${id}`, { method: 'DELETE' }).then(r => r.json()),
+
+  // Orders
+  getOrders: () => fetch(`${BASE}/orders`).then(r => r.json()),
+  getOrder: (id) => fetch(`${BASE}/orders/${id}`).then(r => r.json()),
+
+  // Checkout
+  checkout: (data) =>
+    fetch(`${BASE}/checkout`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+    }).then(r => r.json()),
+};
