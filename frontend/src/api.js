@@ -20,6 +20,7 @@ export const api = {
     fetch(`${BASE}/products/${id}`, { method: 'DELETE' }).then(r => r.json()),
 
   // Reviews
+  getAllReviews: () => fetch(`${BASE}/products/reviews/all`).then(r => r.json()),
   getReviews: (productId) => fetch(`${BASE}/products/${productId}/reviews`).then(r => r.json()),
   createReview: (productId, data) =>
     fetch(`${BASE}/products/${productId}/reviews`, {

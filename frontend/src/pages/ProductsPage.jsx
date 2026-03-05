@@ -23,14 +23,7 @@ export default function ProductsPage({ addToCart }) {
 
   const loadProducts = async () => {
     setLoading(true);
-    const [prods, allReviews] = await Promise.all([
-      api.getProducts(),
-      // fetch reviews for all products in parallel
-      api.getProducts().then(ps =>
-        Promise.all(ps.map(p => api.getReviews(p.id).then(rs => rs.map(r => ({ ...r, productId: p.id })))))
-          .then(groups => groups.flat())
-      ),
-    ]);
+    const [prods, allReviews] = await Promise.all([api.getProducts(), api.getAllReviews()]);
     setProducts(prods);
     setReviews(allReviews);
     setLoading(false);
@@ -71,9 +64,7 @@ export default function ProductsPage({ addToCart }) {
 
   const handleReviewClose = () => {
     setReviewProduct(null);
-    // Refresh reviews after modal closes in case new one was added
-    Promise.all(products.map(p => api.getReviews(p.id).then(rs => rs.map(r => ({ ...r, productId: p.id })))))
-      .then(groups => setReviews(groups.flat()));
+    api.getAllReviews().then(setReviews);
   };
 
   const slug = (name) => name.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');

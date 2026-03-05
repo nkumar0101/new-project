@@ -49,6 +49,11 @@ router.delete('/:id', (req, res) => {
   res.json({ message: 'Product deleted' });
 });
 
+// GET all reviews (across all products)
+router.get('/reviews/all', (req, res) => {
+  res.json(store.reviews);
+});
+
 // GET reviews for a product
 router.get('/:id/reviews', (req, res) => {
   const product = store.products.find(p => p.id === req.params.id);
