@@ -16,7 +16,7 @@ app.use('/api/checkout', checkoutRouter);
 // Only listen when run directly (local dev)
 if (require.main === module) {
   const PORT = 3001;
-  app.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`));
+  app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 }
 
 module.exports = app;
