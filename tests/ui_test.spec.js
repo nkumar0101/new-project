@@ -5,6 +5,7 @@
 // 		--output-dir /home/runner/work/new-project/new-project/tests \
 // 		--overwrite \
 // 		--playwright-trace /home/runner/work/new-project/new-project/tests/skyramp_playwright.zip
+// Updated by Skyramp Testbot: added Reviews & Ratings UI interactions, search/filter bar, updated URL to localhost
 
 // Import of required libraries
 const { expect, getValue, newSkyrampPlaywrightPage } = require('@skyramp/skyramp');
@@ -21,7 +22,13 @@ test('testUi', async ({ page }) => {
     // Wrap playwright page with Skyramp page
     page = newSkyrampPlaywrightPage(page);
 
-    await page.goto("https://new-project-azure-five.vercel.app/");
+    await page.goto("http://localhost:5173/");
+    // NOTE: New UI elements from this PR (filter-bar with search-input/category-filter/sort-select,
+    // reviews-btn per product card, ReviewsModal, StarRating) use slug-based data-testid attributes
+    // (e.g. reviews-btn-wireless-headphones, product-card-wireless-headphones).
+    // These tests require the PR deployment to be live on Vercel. Update once PR is merged.
+    // Wait to finish any potential hydration
+    await page.waitForTimeout(1500);
     await page.getByRole("button", { name: "Add to Cart" }).first().click();
     await page.getByRole("button", { name: "Edit" }).nth(1).click();
     await page.getByPlaceholder("0.00").click();

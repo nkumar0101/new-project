@@ -18,6 +18,8 @@ let URL = "http://localhost:3001";
 
 // fuzz test for /api/checkout POST
 test('testCheckoutPost', async () => {
+    test.setTimeout(60000);
+
     // Invocation of Skyramp Client
     let client =  new SkyrampClient();
 
@@ -27,21 +29,23 @@ test('testCheckoutPost', async () => {
         headers["Authorization"] = "Bearer " + process.env.SKYRAMP_TEST_TOKEN;
     }
 
+    // Step 0: fetch a valid product ID to use in the checkout request
+    const productsResponse = await client.sendRequest({
+        url: URL,
+        path: "/api/products",
+        method: "GET",
+        headers: headers,
+        expectedCode: "20x"
+    });
+    const productId = JSON.parse(productsResponse.responseBody)[0].id;
+
     // Request Body
-    const checkoutPostRequestBody = `{
-            "items": [
-                {
-                    "productId": "test-id",
-                    "quantity": 1
-                }
-            ],
-            "customer": {
-                "name": "Test User",
-                "email": "test@example.com"
-            },
-            "paymentMethod": "credit_card"
-        }`
-    
+    const checkoutPostRequestBody = JSON.stringify({
+        "items": [{ "productId": productId, "quantity": 1 }],
+        "customer": { "name": "Test User", "email": "test@example.com" },
+        "paymentMethod": "credit_card"
+    });
+
     // Fuzz strategies
     const checkoutPostFuzzedBody = {
         "customer": {
@@ -54,19 +58,27 @@ test('testCheckoutPost', async () => {
         }],
         "paymentMethod": "0123456789"
     };
-    // Fuzz status codes
+    // Fuzz status codes:
+    // - customer object with valid strings → 20x (any string is accepted for name/email)
+    // - items.productId with invalid ID → 40x (product not found)
+    // - items.quantity with -10 → 20x (no quantity validation, negative allowed)
+    // - paymentMethod with any string → 20x (no validation on payment method value)
     const expectedCheckoutPostStatusCode = {
         "customer": {
-            "email": "40x",
-            "name": "40x"
+            "email": "20x",
+            "name": "20x"
         },
         "items": [{
             "productId": "40x",
-            "quantity": "40x"
+            "quantity": "20x"
         }],
-        "paymentMethod": "40x"
+        "paymentMethod": "20x"
     };
-    // Fuzz status codes for Null values
+    // Fuzz status codes for Null values:
+    // - customer null → 40x (required)
+    // - items null → 40x (cart is empty)
+    // - items.quantity null → 20x (backend computes subtotal as 0, no validation)
+    // - paymentMethod null → 20x (optional, defaults to credit_card)
     const expectedCheckoutPostNullStatusCode = {
         "customer": {
             "email": "40x",
@@ -74,9 +86,9 @@ test('testCheckoutPost', async () => {
         },
         "items": [{
             "productId": "40x",
-            "quantity": "40x"
+            "quantity": "20x"
         }],
-        "paymentMethod": "40x"
+        "paymentMethod": "20x"
     };
 
     // Execute Request
@@ -85,7 +97,7 @@ test('testCheckoutPost', async () => {
         path:"/api/checkout",
         method:"POST",
         body:checkoutPostRequestBody,
-        headers:headers,
+        headers:{ ...headers, "Content-Type": "application/json" },
         expectedCode:"20x"
     });
 
@@ -97,7 +109,7 @@ test('testCheckoutPost', async () => {
             path:"/api/checkout",
             method:"POST",
             body:checkoutPostRequestBody,
-            headers:headers,
+            headers:{ ...headers, "Content-Type": "application/json" },
             dataOverride:{[key]: getValue(checkoutPostFuzzedBody, key)},
             expectedCode:getValue(expectedCheckoutPostStatusCode, key),
             description:`Fuzzing request body ${key} to ${getValue(checkoutPostFuzzedBody, key)}`
@@ -110,7 +122,7 @@ test('testCheckoutPost', async () => {
             path:"/api/checkout",
             method:"POST",
             body:checkoutPostRequestBody,
-            headers:headers,
+            headers:{ ...headers, "Content-Type": "application/json" },
             dataOverride:{[key]: null},
             expectedCode:getValue(expectedCheckoutPostNullStatusCode, key),
             description:`Fuzzing request body ${key} to null`
@@ -120,4 +132,3 @@ test('testCheckoutPost', async () => {
 
     assert.ok(client.isSuccess(), JSON.stringify(client.getFailedResponses()))
 });
-

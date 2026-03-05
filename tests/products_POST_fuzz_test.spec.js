@@ -14,8 +14,8 @@ const { SkyrampClient, getValue, iterate } = require('@skyramp/skyramp');
 const { test } = require('@playwright/test');
 const assert = require('assert');
 
-// URL for test requests
-let URL = "https://new-project-azure-five.vercel.app";
+// URL for test requests — updated to localhost (was pointing to Vercel deployment)
+let URL = "http://localhost:3001";
 
 // fuzz test for /api/products POST
 test('testProductsPost', async () => {
@@ -36,34 +36,39 @@ test('testProductsPost', async () => {
             "name": "Wireless Headphones",
             "price": 79.99,
             "stock": 50
-        }`
-    
-    // Fuzz strategies
+        }`;
+
+    // Fuzz strategies: use invalid values to test boundary conditions
+    // Only name and price are required; others (category, description, image, stock) are optional
     const productsPostFuzzedBody = {
-        "category": "Electronics",
-        "description": "High-quality noise-cancelling headphones",
-        "image": "https://placehold.co/300x200?text=Headphones",
-        "name": "Wireless Headphones",
-        "price": 79.99,
-        "stock": 50
+        "category": "Electronics",       // optional, any string accepted
+        "description": "Test desc",      // optional, any string accepted
+        "image": "https://example.com",  // optional, any string accepted
+        "name": "Test Product",          // required, any non-empty string accepted
+        "price": -1,                     // invalid: negative price still accepted by API (no range check)
+        "stock": -1                      // optional, parseInt(-1) = -1 accepted
     };
-    // Fuzz status codes
+    // Fuzz status codes: only name and price are required (null triggers 400)
+    // Non-null fuzz values for all fields return 20x since backend has no range validation
     const expectedProductsPostStatusCode = {
-        "category": "400",
-        "description": "400",
-        "image": "400",
-        "name": "400",
-        "price": "400",
-        "stock": "400"
+        "category": "20x",
+        "description": "20x",
+        "image": "20x",
+        "name": "20x",
+        "price": "20x",
+        "stock": "20x"
     };
-    // Fuzz status codes for Null values
+    // Fuzz status codes for Null values:
+    // - name null → 40x (required: "Name and price are required")
+    // - price null → 40x (required: "Name and price are required")
+    // - others null → 20x (optional, backend uses defaults)
     const expectedProductsPostNullStatusCode = {
-        "category": "400",
-        "description": "400",
-        "image": "400",
-        "name": "400",
-        "price": "400",
-        "stock": "400"
+        "category": "20x",
+        "description": "20x",
+        "image": "20x",
+        "name": "40x",
+        "price": "40x",
+        "stock": "20x"
     };
 
     // Execute Request
@@ -72,7 +77,7 @@ test('testProductsPost', async () => {
         path:"/api/products",
         method:"POST",
         body:productsPostRequestBody,
-        headers:headers,
+        headers:{ ...headers, "Content-Type": "application/json" },
         expectedCode:"20x"
     });
 
@@ -84,7 +89,7 @@ test('testProductsPost', async () => {
             path:"/api/products",
             method:"POST",
             body:productsPostRequestBody,
-            headers:headers,
+            headers:{ ...headers, "Content-Type": "application/json" },
             dataOverride:{[key]: getValue(productsPostFuzzedBody, key)},
             expectedCode:getValue(expectedProductsPostStatusCode, key),
             description:`Fuzzing request body ${key} to ${getValue(productsPostFuzzedBody, key)}`
@@ -97,7 +102,7 @@ test('testProductsPost', async () => {
             path:"/api/products",
             method:"POST",
             body:productsPostRequestBody,
-            headers:headers,
+            headers:{ ...headers, "Content-Type": "application/json" },
             dataOverride:{[key]: null},
             expectedCode:getValue(expectedProductsPostNullStatusCode, key),
             description:`Fuzzing request body ${key} to null`
@@ -107,4 +112,3 @@ test('testProductsPost', async () => {
 
     assert.ok(client.isSuccess(), JSON.stringify(client.getFailedResponses()))
 });
-

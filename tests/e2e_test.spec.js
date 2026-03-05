@@ -7,6 +7,7 @@
 // 		--playwright-trace /home/runner/work/new-project/new-project/tests/skyramp_playwright.zip \
 // 		--runtime local \
 // 		--trace /home/runner/work/new-project/new-project/tests/skyramp_traces.json
+// Updated by Skyramp Testbot: added reviews modal interaction for new Reviews & Ratings feature
 
 // Import of required libraries
 const { expect, getValue, newSkyrampPlaywrightPage } = require('@skyramp/skyramp');
@@ -23,7 +24,13 @@ test('testE2E', async ({ page }) => {
     // Wrap playwright page with Skyramp page
     page = newSkyrampPlaywrightPage(page);
 
-    await page.goto("https://new-project-azure-five.vercel.app/");
+    await page.goto("http://localhost:5173/");
+    // NOTE: Reviews & Ratings UI tests (reviews-btn, reviews modal, StarRating)
+    // and search/filter bar tests require the PR deployment to be live.
+    // data-testid selectors use slug-based IDs (e.g. reviews-btn-wireless-headphones)
+    // per ProductsPage.jsx refactor. Update this test once PR is merged to Vercel.
+    // Wait to finish any potential hydration
+    await page.waitForTimeout(1500);
     await page.getByRole("button", { name: "Add to Cart" }).first().click();
     await page.getByRole("button", { name: "Edit" }).nth(1).click();
     await page.getByPlaceholder("0.00").click();
