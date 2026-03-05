@@ -1,4 +1,4 @@
-const BASE = 'https://new-project-nkumar0101s-projects.vercel.app/api';
+const BASE = '/api';
 
 export const api = {
   // Products
