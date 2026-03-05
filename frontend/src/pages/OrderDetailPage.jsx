@@ -17,68 +17,68 @@ export default function OrderDetailPage() {
     api.getOrder(id).then(data => { setOrder(data); setLoading(false); });
   }, [id]);
 
-  if (loading) return <div className="loading">Loading order...</div>;
-  if (!order || order.error) return <div className="loading">Order not found.</div>;
+  if (loading) return <div className="loading" data-testid="order-detail-loading">Loading order...</div>;
+  if (!order || order.error) return <div className="loading" data-testid="order-detail-not-found">Order not found.</div>;
 
   const style = STATUS_COLORS[order.status] || { bg: '#f3f4f6', color: '#374151' };
 
   return (
-    <div className="order-detail">
+    <div className="order-detail" data-testid="order-detail">
       <div className="detail-header">
-        <Link to="/orders" className="back-link">← Back to Orders</Link>
+        <Link to="/orders" className="back-link" data-testid="order-detail-back">← Back to Orders</Link>
         <h1>Order Details</h1>
       </div>
 
       <div className="detail-grid">
-        <div className="detail-card">
+        <div className="detail-card" data-testid="order-info-card">
           <h2>Order Info</h2>
           <div className="info-rows">
             <div className="info-row">
               <span>Order ID</span>
-              <code>{order.id}</code>
+              <code data-testid="order-detail-id">{order.id}</code>
             </div>
             <div className="info-row">
               <span>Status</span>
-              <span className="status-pill" style={{ background: style.bg, color: style.color }}>
+              <span className="status-pill" data-testid="order-detail-status" style={{ background: style.bg, color: style.color }}>
                 {order.status.replace('_', ' ')}
               </span>
             </div>
             <div className="info-row">
               <span>Payment</span>
-              <span className={`payment-status ${order.paymentStatus}`}>
+              <span className={`payment-status ${order.paymentStatus}`} data-testid="order-detail-payment">
                 {order.paymentStatus} ({order.paymentMethod.replace('_', ' ')})
               </span>
             </div>
             <div className="info-row">
               <span>Date</span>
-              <span>{new Date(order.createdAt).toLocaleString()}</span>
+              <span data-testid="order-detail-date">{new Date(order.createdAt).toLocaleString()}</span>
             </div>
           </div>
         </div>
 
-        <div className="detail-card">
+        <div className="detail-card" data-testid="order-customer-card">
           <h2>Customer</h2>
           <div className="info-rows">
             <div className="info-row">
               <span>Name</span>
-              <span>{order.customer.name}</span>
+              <span data-testid="order-detail-customer-name">{order.customer.name}</span>
             </div>
             <div className="info-row">
               <span>Email</span>
-              <span>{order.customer.email}</span>
+              <span data-testid="order-detail-customer-email">{order.customer.email}</span>
             </div>
             {order.customer.address && (
               <div className="info-row">
                 <span>Address</span>
-                <span>{order.customer.address}</span>
+                <span data-testid="order-detail-customer-address">{order.customer.address}</span>
               </div>
             )}
           </div>
         </div>
 
-        <div className="detail-card items-card">
+        <div className="detail-card items-card" data-testid="order-items-card">
           <h2>Items</h2>
-          <table className="items-table">
+          <table className="items-table" data-testid="order-items-table">
             <thead>
               <tr>
                 <th>Product</th>
@@ -89,18 +89,18 @@ export default function OrderDetailPage() {
             </thead>
             <tbody>
               {order.items.map((item, i) => (
-                <tr key={i}>
-                  <td>{item.name}</td>
-                  <td>${item.price.toFixed(2)}</td>
-                  <td>{item.quantity}</td>
-                  <td><strong>${item.subtotal.toFixed(2)}</strong></td>
+                <tr key={i} data-testid={`order-item-row-${i}`}>
+                  <td data-testid={`order-item-name-${i}`}>{item.name}</td>
+                  <td data-testid={`order-item-price-${i}`}>${item.price.toFixed(2)}</td>
+                  <td data-testid={`order-item-qty-${i}`}>{item.quantity}</td>
+                  <td data-testid={`order-item-subtotal-${i}`}><strong>${item.subtotal.toFixed(2)}</strong></td>
                 </tr>
               ))}
             </tbody>
             <tfoot>
               <tr>
                 <td colSpan={3} className="total-label">Total</td>
-                <td className="total-value">${order.total.toFixed(2)}</td>
+                <td className="total-value" data-testid="order-detail-total">${order.total.toFixed(2)}</td>
               </tr>
             </tfoot>
           </table>
