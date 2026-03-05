@@ -55,19 +55,19 @@ export default function ProductsPage({ addToCart }) {
   };
 
   return (
-    <div className="products-page">
-      {toast && <div className="toast">{toast}</div>}
+    <div className="products-page" data-testid="products-page">
+      {toast && <div className="toast" data-testid="toast">{toast}</div>}
 
       <div className="page-header">
         <h1>Products</h1>
-        <button className="btn-primary" onClick={() => { setEditingProduct(null); setShowForm(true); }}>
+        <button className="btn-primary" data-testid="add-product-btn" onClick={() => { setEditingProduct(null); setShowForm(true); }}>
           + Add Product
         </button>
       </div>
 
       {showForm && (
-        <div className="modal-overlay" onClick={() => { setShowForm(false); setEditingProduct(null); }}>
-          <div className="modal" onClick={e => e.stopPropagation()}>
+        <div className="modal-overlay" data-testid="product-modal-overlay" onClick={() => { setShowForm(false); setEditingProduct(null); }}>
+          <div className="modal" data-testid="product-modal" onClick={e => e.stopPropagation()}>
             <h2>{editingProduct ? 'Edit Product' : 'Add Product'}</h2>
             <ProductForm
               initial={editingProduct}
@@ -79,34 +79,35 @@ export default function ProductsPage({ addToCart }) {
       )}
 
       {loading ? (
-        <div className="loading">Loading products...</div>
+        <div className="loading" data-testid="products-loading">Loading products...</div>
       ) : products.length === 0 ? (
-        <div className="empty">No products yet. Add one!</div>
+        <div className="empty" data-testid="products-empty">No products yet. Add one!</div>
       ) : (
-        <div className="product-grid">
+        <div className="product-grid" data-testid="product-grid">
           {products.map(product => (
-            <div key={product.id} className="product-card">
-              <img src={product.image} alt={product.name} className="product-image" />
+            <div key={product.id} className="product-card" data-testid={`product-card-${product.id}`}>
+              <img src={product.image} alt={product.name} className="product-image" data-testid={`product-image-${product.id}`} />
               <div className="product-info">
-                <span className="product-category">{product.category}</span>
-                <h3 className="product-name">{product.name}</h3>
-                <p className="product-desc">{product.description}</p>
+                <span className="product-category" data-testid={`product-category-${product.id}`}>{product.category}</span>
+                <h3 className="product-name" data-testid={`product-name-${product.id}`}>{product.name}</h3>
+                <p className="product-desc" data-testid={`product-desc-${product.id}`}>{product.description}</p>
                 <div className="product-footer">
-                  <span className="product-price">${product.price.toFixed(2)}</span>
-                  <span className={`product-stock ${product.stock === 0 ? 'out' : ''}`}>
+                  <span className="product-price" data-testid={`product-price-${product.id}`}>${product.price.toFixed(2)}</span>
+                  <span className={`product-stock ${product.stock === 0 ? 'out' : ''}`} data-testid={`product-stock-${product.id}`}>
                     {product.stock === 0 ? 'Out of stock' : `${product.stock} in stock`}
                   </span>
                 </div>
                 <div className="product-actions">
                   <button
                     className="btn-primary"
+                    data-testid={`add-to-cart-btn-${product.id}`}
                     onClick={() => handleAdd(product)}
                     disabled={product.stock === 0}
                   >
                     Add to Cart
                   </button>
-                  <button className="btn-secondary" onClick={() => handleEdit(product)}>Edit</button>
-                  <button className="btn-danger" onClick={() => handleDelete(product.id)}>Delete</button>
+                  <button className="btn-secondary" data-testid={`edit-product-btn-${product.id}`} onClick={() => handleEdit(product)}>Edit</button>
+                  <button className="btn-danger" data-testid={`delete-product-btn-${product.id}`} onClick={() => handleDelete(product.id)}>Delete</button>
                 </div>
               </div>
             </div>
