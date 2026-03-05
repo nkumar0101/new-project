@@ -1,0 +1,28 @@
+name: Skyramp Testbot
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.head_ref }}
+  cancel-in-progress: true
+
+jobs:
+  testbot:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: skyramp/testbot@v0.2.0
+        with:
+          skyramp_license_file: ${{ secrets.SKYRAMP_LICENSE }}
+          anthropic_api_key: ${{ secrets.SKYRAMP_TESTBOT_API_KEY }}
+          service_startup_command: 'npm install && node backend/server.js &'
+          test_directory: 'tests'
