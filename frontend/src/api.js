@@ -1,4 +1,4 @@
-const BASE = '/api';
+const BASE = `${window.location.origin}/api`;
 
 export const api = {
   // Products
@@ -18,6 +18,16 @@ export const api = {
     }).then(r => r.json()),
   deleteProduct: (id) =>
     fetch(`${BASE}/products/${id}`, { method: 'DELETE' }).then(r => r.json()),
+
+  // Reviews
+  getAllReviews: () => fetch(`${BASE}/products/reviews/all`).then(r => r.json()),
+  getReviews: (productId) => fetch(`${BASE}/products/${productId}/reviews`).then(r => r.json()),
+  createReview: (productId, data) =>
+    fetch(`${BASE}/products/${productId}/reviews`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+    }).then(r => r.json()),
 
   // Orders
   getOrders: () => fetch(`${BASE}/orders`).then(r => r.json()),
