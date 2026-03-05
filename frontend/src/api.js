@@ -1,4 +1,4 @@
-const BASE = '/api';
+const BASE = `${window.location.origin}/api`;
 
 export const api = {
   // Products
