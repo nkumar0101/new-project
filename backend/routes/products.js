@@ -29,7 +29,7 @@ router.post('/', (req, res) => {
     category: category || 'General',
     image: image || `https://placehold.co/300x200?text=${encodeURIComponent(name)}`,
   };
-  store.products.push(product);
+  store.products.unshift(product);
   res.status(201).json(product);
 });
 

@@ -19,6 +19,9 @@ export const api = {
   deleteProduct: (id) =>
     fetch(`${BASE}/products/${id}`, { method: 'DELETE' }).then(r => r.json()),
 
+  // Reset
+  reset: () => fetch(`${BASE}/reset`, { method: 'POST' }).then(r => r.json()),
+
   // Reviews
   getAllReviews: () => fetch(`${BASE}/products/reviews/all`).then(r => r.json()),
   getReviews: (productId) => fetch(`${BASE}/products/${productId}/reviews`).then(r => r.json()),
