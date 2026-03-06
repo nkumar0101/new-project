@@ -12,6 +12,10 @@ router.post('/', (req, res) => {
   if (!customer || !customer.name || !customer.email) {
     return res.status(400).json({ error: 'Customer name and email are required' });
   }
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailRegex.test(customer.email)) {
+    return res.status(400).json({ error: 'Invalid email address' });
+  }
 
   // Validate items and calculate total
   const orderItems = [];
@@ -41,17 +45,14 @@ router.post('/', (req, res) => {
     product.stock -= item.quantity;
   }
 
-  // Fake payment processing
-  const paymentStatus = simulatePayment(paymentMethod);
-
   const order = {
     id: uuidv4(),
     customer,
     items: orderItems,
     total: parseFloat(total.toFixed(2)),
     paymentMethod: paymentMethod || 'credit_card',
-    paymentStatus,
-    status: paymentStatus === 'success' ? 'confirmed' : 'payment_failed',
+    paymentStatus: 'success',
+    status: 'confirmed',
     createdAt: new Date().toISOString(),
   };
 
@@ -59,9 +60,5 @@ router.post('/', (req, res) => {
   res.status(201).json(order);
 });
 
-function simulatePayment(method) {
-  // 90% success rate for simulation
-  return Math.random() > 0.1 ? 'success' : 'failed';
-}
 
 module.exports = router;
