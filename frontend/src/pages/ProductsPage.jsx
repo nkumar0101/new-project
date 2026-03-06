@@ -13,6 +13,7 @@ export default function ProductsPage({ addToCart }) {
   const [showForm, setShowForm] = useState(false);
   const [editingProduct, setEditingProduct] = useState(null);
   const [reviewProduct, setReviewProduct] = useState(null);
+  const [deleteConfirmProduct, setDeleteConfirmProduct] = useState(null);
   const [loading, setLoading] = useState(true);
   const [toast, setToast] = useState('');
   const [search, setSearch] = useState('');
@@ -56,8 +57,8 @@ export default function ProductsPage({ addToCart }) {
   };
 
   const handleDelete = async (id) => {
-    if (!confirm('Delete this product?')) return;
     await api.deleteProduct(id);
+    setDeleteConfirmProduct(null);
     showToast('Product deleted');
     loadProducts();
   };
@@ -138,6 +139,19 @@ export default function ProductsPage({ addToCart }) {
         <ReviewsModal product={reviewProduct} onClose={handleReviewClose} />
       )}
 
+      {deleteConfirmProduct && (
+        <div className="modal-overlay" data-testid="delete-confirm-overlay" onClick={() => setDeleteConfirmProduct(null)}>
+          <div className="modal delete-confirm-modal" data-testid="delete-confirm-modal" onClick={e => e.stopPropagation()}>
+            <h2>Delete Product</h2>
+            <p>Are you sure you want to delete <strong>{deleteConfirmProduct.name}</strong>? This cannot be undone.</p>
+            <div className="delete-confirm-actions">
+              <button className="btn-secondary" data-testid="delete-confirm-cancel" onClick={() => setDeleteConfirmProduct(null)}>Cancel</button>
+              <button className="btn-danger" data-testid="delete-confirm-ok" onClick={() => handleDelete(deleteConfirmProduct.id)}>Delete</button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {loading ? (
         <div className="loading" data-testid="products-loading">Loading products...</div>
       ) : filtered.length === 0 ? (
@@ -190,7 +204,7 @@ export default function ProductsPage({ addToCart }) {
                       Add to Cart
                     </button>
                     <button className="btn-secondary" data-testid={`edit-product-btn-${s}`} onClick={() => { setEditingProduct(product); setShowForm(true); }}>Edit</button>
-                    <button className="btn-danger" data-testid={`delete-product-btn-${s}`} onClick={() => handleDelete(product.id)}>Delete</button>
+                    <button className="btn-danger" data-testid={`delete-product-btn-${s}`} onClick={() => setDeleteConfirmProduct(product)}>Delete</button>
                   </div>
                 </div>
               </div>
