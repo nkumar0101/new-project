@@ -13,6 +13,8 @@ export default function ProductsPage({ addToCart }) {
   const [showForm, setShowForm] = useState(false);
   const [editingProduct, setEditingProduct] = useState(null);
   const [reviewProduct, setReviewProduct] = useState(null);
+  const [deleteConfirmProduct, setDeleteConfirmProduct] = useState(null);
+  const [showResetConfirm, setShowResetConfirm] = useState(false);
   const [loading, setLoading] = useState(true);
   const [toast, setToast] = useState('');
   const [search, setSearch] = useState('');
@@ -56,8 +58,8 @@ export default function ProductsPage({ addToCart }) {
   };
 
   const handleDelete = async (id) => {
-    if (!confirm('Delete this product?')) return;
     await api.deleteProduct(id);
+    setDeleteConfirmProduct(null);
     showToast('Product deleted');
     loadProducts();
   };
@@ -91,9 +93,14 @@ export default function ProductsPage({ addToCart }) {
 
       <div className="page-header">
         <h1>Products</h1>
-        <button className="btn-primary" data-testid="add-product-btn" onClick={() => { setEditingProduct(null); setShowForm(true); }}>
-          + Add Product
-        </button>
+        <div className="page-header-actions">
+          <button className="btn-secondary" data-testid="reset-btn" onClick={() => setShowResetConfirm(true)}>
+            Reset State
+          </button>
+          <button className="btn-primary" data-testid="add-product-btn" onClick={() => { setEditingProduct(null); setShowForm(true); }}>
+            + Add Product
+          </button>
+        </div>
       </div>
 
       <div className="filter-bar" data-testid="filter-bar">
@@ -136,6 +143,37 @@ export default function ProductsPage({ addToCart }) {
 
       {reviewProduct && (
         <ReviewsModal product={reviewProduct} onClose={handleReviewClose} />
+      )}
+
+      {showResetConfirm && (
+        <div className="modal-overlay" data-testid="reset-confirm-overlay" onClick={() => setShowResetConfirm(false)}>
+          <div className="modal delete-confirm-modal" data-testid="reset-confirm-modal" onClick={e => e.stopPropagation()}>
+            <h2>Reset State</h2>
+            <p>This will restore all products, reviews, and orders back to their original seed data. Any changes you made will be lost.</p>
+            <div className="delete-confirm-actions">
+              <button className="btn-secondary" data-testid="reset-confirm-cancel" onClick={() => setShowResetConfirm(false)}>Cancel</button>
+              <button className="btn-danger" data-testid="reset-confirm-ok" onClick={async () => {
+                await api.reset();
+                setShowResetConfirm(false);
+                showToast('State reset to defaults');
+                loadProducts();
+              }}>Reset</button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {deleteConfirmProduct && (
+        <div className="modal-overlay" data-testid="delete-confirm-overlay" onClick={() => setDeleteConfirmProduct(null)}>
+          <div className="modal delete-confirm-modal" data-testid="delete-confirm-modal" onClick={e => e.stopPropagation()}>
+            <h2>Delete Product</h2>
+            <p>Are you sure you want to delete <strong>{deleteConfirmProduct.name}</strong>? This cannot be undone.</p>
+            <div className="delete-confirm-actions">
+              <button className="btn-secondary" data-testid="delete-confirm-cancel" onClick={() => setDeleteConfirmProduct(null)}>Cancel</button>
+              <button className="btn-danger" data-testid="delete-confirm-ok" onClick={() => handleDelete(deleteConfirmProduct.id)}>Delete</button>
+            </div>
+          </div>
+        </div>
       )}
 
       {loading ? (
@@ -190,7 +228,7 @@ export default function ProductsPage({ addToCart }) {
                       Add to Cart
                     </button>
                     <button className="btn-secondary" data-testid={`edit-product-btn-${s}`} onClick={() => { setEditingProduct(product); setShowForm(true); }}>Edit</button>
-                    <button className="btn-danger" data-testid={`delete-product-btn-${s}`} onClick={() => handleDelete(product.id)}>Delete</button>
+                    <button className="btn-danger" data-testid={`delete-product-btn-${s}`} onClick={() => setDeleteConfirmProduct(product)}>Delete</button>
                   </div>
                 </div>
               </div>
