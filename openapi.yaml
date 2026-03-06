@@ -5,7 +5,7 @@ info:
   description: REST API for managing products, orders, and checkout for the ShopEasy ecommerce application.
 
 servers:
-  - url: https://new-project-azure-five.vercel.app
+  - url: https://new-project-git-nk-testbot-nkumar0101s-projects.vercel.app/
     description: Production
 
 tags:
