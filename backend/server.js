@@ -3,6 +3,7 @@ const cors = require('cors');
 const productsRouter = require('./routes/products');
 const ordersRouter = require('./routes/orders');
 const checkoutRouter = require('./routes/checkout');
+const { resetStore } = require('./store');
 
 const app = express();
 
@@ -12,6 +13,11 @@ app.use(express.json());
 app.use('/api/products', productsRouter);
 app.use('/api/orders', ordersRouter);
 app.use('/api/checkout', checkoutRouter);
+
+app.post('/api/reset', (req, res) => {
+  resetStore();
+  res.json({ message: 'Store reset to seed data' });
+});
 
 // Only listen when run directly (local dev)
 if (require.main === module) {
