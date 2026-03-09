@@ -46,22 +46,23 @@ export default function ProductsPage({ addToCart }) {
 
   const handleSave = async (data) => {
     if (editingProduct) {
-      await api.updateProduct(editingProduct.id, data);
+      const updated = await api.updateProduct(editingProduct.id, data);
+      setProducts(prev => prev.map(p => p.id === editingProduct.id ? updated : p));
       showToast('Product updated');
     } else {
-      await api.createProduct(data);
+      const created = await api.createProduct(data);
+      setProducts(prev => [created, ...prev]);
       showToast('Product created');
     }
     setShowForm(false);
     setEditingProduct(null);
-    loadProducts();
   };
 
   const handleDelete = async (id) => {
     await api.deleteProduct(id);
+    setProducts(prev => prev.filter(p => p.id !== id));
     setDeleteConfirmProduct(null);
     showToast('Product deleted');
-    loadProducts();
   };
 
   const handleReviewClose = () => {
