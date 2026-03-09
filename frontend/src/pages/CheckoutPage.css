@@ -48,6 +48,44 @@
 .review-name { font-weight: 500; }
 .review-qty { color: #9ca3af; font-weight: 400; }
 
+.discount-section { margin: 12px 0 8px; }
+
+.discount-input-row { display: flex; gap: 8px; }
+.discount-input { flex: 1; font-size: 13px; padding: 8px 10px; }
+.discount-apply-btn { font-size: 13px; padding: 8px 12px; white-space: nowrap; }
+
+.discount-applied {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #ecfdf5;
+  border: 1px solid #6ee7b7;
+  border-radius: 6px;
+  padding: 8px 10px;
+  font-size: 13px;
+  color: #065f46;
+  font-weight: 500;
+}
+.discount-remove {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #065f46;
+  font-size: 14px;
+  padding: 0 2px;
+  line-height: 1;
+}
+.discount-error { font-size: 12px; color: #ef4444; margin: 4px 0 0; }
+
+.review-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 14px;
+  color: #374151;
+  padding: 4px 0;
+}
+.discount-row { color: #10b981; font-weight: 500; }
+
 .review-total {
   display: flex;
   justify-content: space-between;
@@ -55,6 +93,7 @@
   font-weight: 700;
   border-top: 1px solid #e5e7eb;
   padding-top: 12px;
+  margin-top: 8px;
 }
 
 /* Result page */

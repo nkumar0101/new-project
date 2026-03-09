@@ -40,7 +40,13 @@ function createSeedData() {
     { id: uuidv4(), productId: p[13], author: 'Reese V.',   rating: 5, comment: 'Smooth tracking on any surface and the battery lasts weeks. Completely silent clicks.', createdAt: '2026-01-28T15:00:00.000Z' },
   ];
 
-  return { products, reviews, orders: [] };
+  const discounts = [
+    { code: 'SAVE10',    type: 'percent', value: 10, description: '10% off your order' },
+    { code: 'FLAT5',     type: 'flat',    value: 5,  description: '$5 off your order' },
+    { code: 'WELCOME20', type: 'percent', value: 20, description: '20% off your order' },
+  ];
+
+  return { products, reviews, orders: [], discounts };
 }
 
 const store = createSeedData();
@@ -50,6 +56,7 @@ const resetStore = () => {
   store.products = seed.products;
   store.reviews = seed.reviews;
   store.orders = seed.orders;
+  store.discounts = seed.discounts;
 };
 
 module.exports = { store, uuidv4, resetStore };
