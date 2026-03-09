@@ -36,6 +36,9 @@ export const api = {
   getOrders: () => fetch(`${BASE}/orders`).then(r => r.json()),
   getOrder: (id) => fetch(`${BASE}/orders/${id}`).then(r => r.json()),
 
+  // Discounts
+  validateDiscount: (code) => fetch(`${BASE}/discounts/validate/${encodeURIComponent(code)}`).then(r => r.json()),
+
   // Checkout
   checkout: (data) =>
     fetch(`${BASE}/checkout`, {
