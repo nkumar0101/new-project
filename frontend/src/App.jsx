@@ -57,7 +57,7 @@ export default function App() {
 
       <main className="main" data-testid="main">
         <Routes>
-          <Route path="/" element={<ProductsPage addToCart={addToCart} />} />
+          <Route path="/" element={<ProductsPage addToCart={addToCart} clearCart={clearCart} />} />
           <Route path="/cart" element={<CartPage cart={cart} updateCartItem={updateCartItem} />} />
           <Route path="/checkout" element={<CheckoutPage cart={cart} clearCart={clearCart} />} />
           <Route path="/orders" element={<OrdersPage />} />

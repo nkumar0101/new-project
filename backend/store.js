@@ -1,8 +1,27 @@
 // In-memory data store
 const { v4: uuidv4 } = require('uuid');
 
+// Static UUIDs for seed products so all serverless instances share the same IDs
+const SEED_IDS = [
+  'a1000000-0000-0000-0000-000000000001',
+  'a1000000-0000-0000-0000-000000000002',
+  'a1000000-0000-0000-0000-000000000003',
+  'a1000000-0000-0000-0000-000000000004',
+  'a1000000-0000-0000-0000-000000000005',
+  'a1000000-0000-0000-0000-000000000006',
+  'a1000000-0000-0000-0000-000000000007',
+  'a1000000-0000-0000-0000-000000000008',
+  'a1000000-0000-0000-0000-000000000009',
+  'a1000000-0000-0000-0000-000000000010',
+  'a1000000-0000-0000-0000-000000000011',
+  'a1000000-0000-0000-0000-000000000012',
+  'a1000000-0000-0000-0000-000000000013',
+  'a1000000-0000-0000-0000-000000000014',
+  'a1000000-0000-0000-0000-000000000015',
+];
+
 function createSeedData() {
-  const p = Array.from({ length: 15 }, () => uuidv4());
+  const p = SEED_IDS;
 
   const products = [
     { id: p[0],  name: 'Wireless Headphones',         description: 'High-quality noise-cancelling headphones',                       price: 79.99,  stock: 50,  category: 'Electronics', image: 'https://placehold.co/300x200?text=Headphones' },
@@ -23,21 +42,21 @@ function createSeedData() {
   ];
 
   const reviews = [
-    { id: uuidv4(), productId: p[0],  author: 'Alex M.',    rating: 5, comment: 'Incredible sound quality and the noise cancellation is top notch. Best headphones I have owned.', createdAt: '2026-01-10T09:00:00.000Z' },
-    { id: uuidv4(), productId: p[0],  author: 'Jamie L.',   rating: 4, comment: 'Great headphones, very comfortable for long sessions. Battery life is excellent.', createdAt: '2026-01-18T14:30:00.000Z' },
-    { id: uuidv4(), productId: p[0],  author: 'Chris R.',   rating: 5, comment: 'Perfect for working from home. The noise cancellation blocks everything out.', createdAt: '2026-02-02T11:15:00.000Z' },
-    { id: uuidv4(), productId: p[1],  author: 'Sam T.',     rating: 4, comment: 'Really lightweight and great for long runs. Sizing runs slightly small so order up.', createdAt: '2026-01-05T08:00:00.000Z' },
-    { id: uuidv4(), productId: p[1],  author: 'Dana W.',    rating: 5, comment: 'Super comfortable right out of the box. No break-in period needed at all.', createdAt: '2026-01-22T16:45:00.000Z' },
-    { id: uuidv4(), productId: p[2],  author: 'Morgan K.',  rating: 3, comment: 'Makes decent coffee but the carafe drips a little. Gets the job done for the price.', createdAt: '2026-01-12T07:30:00.000Z' },
-    { id: uuidv4(), productId: p[2],  author: 'Riley B.',   rating: 4, comment: 'Easy to use and the programmable timer is really convenient for mornings.', createdAt: '2026-02-01T09:00:00.000Z' },
-    { id: uuidv4(), productId: p[3],  author: 'Jordan P.',  rating: 5, comment: 'The tactile feedback is amazing. My typing speed has noticeably improved since switching.', createdAt: '2026-01-08T13:00:00.000Z' },
-    { id: uuidv4(), productId: p[3],  author: 'Casey F.',   rating: 4, comment: 'Great keyboard, the RGB is vibrant. A bit loud for office use but perfect at home.', createdAt: '2026-01-30T10:20:00.000Z' },
-    { id: uuidv4(), productId: p[4],  author: 'Taylor N.',  rating: 5, comment: 'Excellent grip and the thickness is perfect. Does not slip at all even during hot yoga.', createdAt: '2026-01-15T17:00:00.000Z' },
-    { id: uuidv4(), productId: p[6],  author: 'Quinn H.',   rating: 5, comment: 'Keeps my water cold all day even in hot weather. The build quality feels very premium.', createdAt: '2026-01-20T12:00:00.000Z' },
-    { id: uuidv4(), productId: p[6],  author: 'Avery S.',   rating: 4, comment: 'Great bottle, does exactly what it promises. The lid could seal a bit more securely though.', createdAt: '2026-02-05T08:45:00.000Z' },
-    { id: uuidv4(), productId: p[8],  author: 'Blake O.',   rating: 5, comment: 'Tackled a muddy trail in these and my feet stayed completely dry. Very impressed.', createdAt: '2026-01-25T14:00:00.000Z' },
-    { id: uuidv4(), productId: p[9],  author: 'Peyton C.',  rating: 4, comment: 'Blends everything smoothly and is super easy to clean. Motor sounds powerful and reliable.', createdAt: '2026-02-08T11:30:00.000Z' },
-    { id: uuidv4(), productId: p[13], author: 'Reese V.',   rating: 5, comment: 'Smooth tracking on any surface and the battery lasts weeks. Completely silent clicks.', createdAt: '2026-01-28T15:00:00.000Z' },
+    { id: 'r100000-0000-0000-0000-000000000001', productId: p[0],  author: 'Alex M.',    rating: 5, comment: 'Incredible sound quality and the noise cancellation is top notch. Best headphones I have owned.', createdAt: '2026-01-10T09:00:00.000Z' },
+    { id: 'r100000-0000-0000-0000-000000000002', productId: p[0],  author: 'Jamie L.',   rating: 4, comment: 'Great headphones, very comfortable for long sessions. Battery life is excellent.', createdAt: '2026-01-18T14:30:00.000Z' },
+    { id: 'r100000-0000-0000-0000-000000000003', productId: p[0],  author: 'Chris R.',   rating: 5, comment: 'Perfect for working from home. The noise cancellation blocks everything out.', createdAt: '2026-02-02T11:15:00.000Z' },
+    { id: 'r100000-0000-0000-0000-000000000004', productId: p[1],  author: 'Sam T.',     rating: 4, comment: 'Really lightweight and great for long runs. Sizing runs slightly small so order up.', createdAt: '2026-01-05T08:00:00.000Z' },
+    { id: 'r100000-0000-0000-0000-000000000005', productId: p[1],  author: 'Dana W.',    rating: 5, comment: 'Super comfortable right out of the box. No break-in period needed at all.', createdAt: '2026-01-22T16:45:00.000Z' },
+    { id: 'r100000-0000-0000-0000-000000000006', productId: p[2],  author: 'Morgan K.',  rating: 3, comment: 'Makes decent coffee but the carafe drips a little. Gets the job done for the price.', createdAt: '2026-01-12T07:30:00.000Z' },
+    { id: 'r100000-0000-0000-0000-000000000007', productId: p[2],  author: 'Riley B.',   rating: 4, comment: 'Easy to use and the programmable timer is really convenient for mornings.', createdAt: '2026-02-01T09:00:00.000Z' },
+    { id: 'r100000-0000-0000-0000-000000000008', productId: p[3],  author: 'Jordan P.',  rating: 5, comment: 'The tactile feedback is amazing. My typing speed has noticeably improved since switching.', createdAt: '2026-01-08T13:00:00.000Z' },
+    { id: 'r100000-0000-0000-0000-000000000009', productId: p[3],  author: 'Casey F.',   rating: 4, comment: 'Great keyboard, the RGB is vibrant. A bit loud for office use but perfect at home.', createdAt: '2026-01-30T10:20:00.000Z' },
+    { id: 'r100000-0000-0000-0000-000000000010', productId: p[4],  author: 'Taylor N.',  rating: 5, comment: 'Excellent grip and the thickness is perfect. Does not slip at all even during hot yoga.', createdAt: '2026-01-15T17:00:00.000Z' },
+    { id: 'r100000-0000-0000-0000-000000000011', productId: p[6],  author: 'Quinn H.',   rating: 5, comment: 'Keeps my water cold all day even in hot weather. The build quality feels very premium.', createdAt: '2026-01-20T12:00:00.000Z' },
+    { id: 'r100000-0000-0000-0000-000000000012', productId: p[6],  author: 'Avery S.',   rating: 4, comment: 'Great bottle, does exactly what it promises. The lid could seal a bit more securely though.', createdAt: '2026-02-05T08:45:00.000Z' },
+    { id: 'r100000-0000-0000-0000-000000000013', productId: p[8],  author: 'Blake O.',   rating: 5, comment: 'Tackled a muddy trail in these and my feet stayed completely dry. Very impressed.', createdAt: '2026-01-25T14:00:00.000Z' },
+    { id: 'r100000-0000-0000-0000-000000000014', productId: p[9],  author: 'Peyton C.',  rating: 4, comment: 'Blends everything smoothly and is super easy to clean. Motor sounds powerful and reliable.', createdAt: '2026-02-08T11:30:00.000Z' },
+    { id: 'r100000-0000-0000-0000-000000000015', productId: p[13], author: 'Reese V.',   rating: 5, comment: 'Smooth tracking on any surface and the battery lasts weeks. Completely silent clicks.', createdAt: '2026-01-28T15:00:00.000Z' },
   ];
 
   const discounts = [

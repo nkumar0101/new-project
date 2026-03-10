@@ -107,6 +107,10 @@ export default function CheckoutPage({ cart, clearCart }) {
         paymentMethod: form.paymentMethod,
         discountCode: discount ? discount.code : undefined,
       });
+      if (order.error) {
+        alert(`Checkout error: ${order.error}`);
+        return;
+      }
       if (order.paymentStatus === 'success') clearCart();
       setResult(order);
     } catch (err) {

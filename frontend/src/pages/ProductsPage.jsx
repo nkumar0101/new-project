@@ -7,7 +7,7 @@ import './ProductsPage.css';
 
 const CATEGORIES = ['All', 'Electronics', 'Clothing', 'Footwear', 'Kitchen', 'Books', 'Sports', 'Toys', 'General'];
 
-export default function ProductsPage({ addToCart }) {
+export default function ProductsPage({ addToCart, clearCart }) {
   const [products, setProducts] = useState([]);
   const [reviews, setReviews] = useState([]);
   const [showForm, setShowForm] = useState(false);
@@ -155,6 +155,7 @@ export default function ProductsPage({ addToCart }) {
               <button className="btn-secondary" data-testid="reset-confirm-cancel" onClick={() => setShowResetConfirm(false)}>Cancel</button>
               <button className="btn-danger" data-testid="reset-confirm-ok" onClick={async () => {
                 await api.reset();
+                clearCart();
                 setShowResetConfirm(false);
                 showToast('State reset to defaults');
                 loadProducts();
