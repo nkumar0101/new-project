@@ -24,6 +24,6 @@ jobs:
         with:
           skyramp_license_file: ${{ secrets.SKYRAMP_LICENSE }}
           anthropic_api_key: ${{ secrets.SKYRAMP_TESTBOT_API_KEY }}
-          skip_target_startup: 'true'
+          skip_target_setup: 'true'
           test_directory: 'tests'
           skyramp_mcp_version: next
