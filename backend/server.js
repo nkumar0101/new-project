@@ -3,6 +3,7 @@ const cors = require('cors');
 const productsRouter = require('./routes/products');
 const ordersRouter = require('./routes/orders');
 const checkoutRouter = require('./routes/checkout');
+const discountsRouter = require('./routes/discounts');
 const { resetStore } = require('./store');
 
 const app = express();
@@ -13,6 +14,7 @@ app.use(express.json());
 app.use('/api/products', productsRouter);
 app.use('/api/orders', ordersRouter);
 app.use('/api/checkout', checkoutRouter);
+app.use('/api/discounts', discountsRouter);
 
 app.post('/api/reset', (req, res) => {
   resetStore();

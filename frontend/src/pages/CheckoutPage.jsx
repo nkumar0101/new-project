@@ -18,9 +18,40 @@ export default function CheckoutPage({ cart, clearCart }) {
   });
   const [processing, setProcessing] = useState(false);
   const [result, setResult] = useState(null);
+  const [discountInput, setDiscountInput] = useState('');
+  const [discount, setDiscount] = useState(null);
+  const [discountError, setDiscountError] = useState('');
+  const [discountLoading, setDiscountLoading] = useState(false);
 
   const set = (field) => (e) => setForm(f => ({ ...f, [field]: e.target.value }));
-  const total = cart.reduce((sum, i) => sum + i.price * i.quantity, 0);
+  const subtotal = cart.reduce((sum, i) => sum + i.price * i.quantity, 0);
+
+  const discountAmount = discount
+    ? discount.type === 'percent'
+      ? subtotal * (discount.value / 100)
+      : Math.min(discount.value, subtotal)
+    : 0;
+  const total = Math.max(0, subtotal - discountAmount);
+
+  const handleApplyDiscount = async () => {
+    if (!discountInput.trim()) return;
+    setDiscountLoading(true);
+    setDiscountError('');
+    const result = await api.validateDiscount(discountInput.trim());
+    setDiscountLoading(false);
+    if (result.error) {
+      setDiscountError(result.error);
+      setDiscount(null);
+    } else {
+      setDiscount(result);
+    }
+  };
+
+  const handleRemoveDiscount = () => {
+    setDiscount(null);
+    setDiscountInput('');
+    setDiscountError('');
+  };
 
   if (cart.length === 0 && !result) {
     return (
@@ -41,6 +72,11 @@ export default function CheckoutPage({ cart, clearCart }) {
           <>
             <p>Thank you, <strong>{result.customer.name}</strong>! Your order has been placed.</p>
             <p className="order-id" data-testid="checkout-order-id">Order ID: <code>{result.id}</code></p>
+            {result.discountCode && (
+              <p className="order-discount" data-testid="checkout-order-discount">
+                Discount ({result.discountCode}): -${result.discountAmount.toFixed(2)}
+              </p>
+            )}
             <p className="order-total" data-testid="checkout-order-total">Total charged: <strong>${result.total.toFixed(2)}</strong></p>
             <div className="result-actions">
               <button className="btn-primary" data-testid="view-order-btn" onClick={() => navigate(`/orders/${result.id}`)}>
@@ -69,7 +105,12 @@ export default function CheckoutPage({ cart, clearCart }) {
         items: cart.map(i => ({ productId: i.productId, quantity: i.quantity })),
         customer: { name: form.name, email: form.email, address: `${form.address}, ${form.city} ${form.zip}` },
         paymentMethod: form.paymentMethod,
+        discountCode: discount ? discount.code : undefined,
       });
+      if (order.error) {
+        alert(`Checkout error: ${order.error}`);
+        return;
+      }
       if (order.paymentStatus === 'success') clearCart();
       setResult(order);
     } catch (err) {
@@ -162,9 +203,54 @@ export default function CheckoutPage({ cart, clearCart }) {
               </div>
             ))}
           </div>
+
+          <div className="discount-section" data-testid="discount-section">
+            {discount ? (
+              <div className="discount-applied" data-testid="discount-applied">
+                <span className="discount-tag" data-testid="discount-tag">
+                  {discount.code} — {discount.description}
+                </span>
+                <button className="discount-remove" data-testid="discount-remove-btn" onClick={handleRemoveDiscount}>✕</button>
+              </div>
+            ) : (
+              <div className="discount-input-row">
+                <input
+                  className="discount-input"
+                  data-testid="discount-code-input"
+                  placeholder="Discount code"
+                  value={discountInput}
+                  onChange={e => { setDiscountInput(e.target.value); setDiscountError(''); }}
+                  onKeyDown={e => e.key === 'Enter' && (e.preventDefault(), handleApplyDiscount())}
+                />
+                <button
+                  type="button"
+                  className="btn-secondary discount-apply-btn"
+                  data-testid="discount-apply-btn"
+                  onClick={handleApplyDiscount}
+                  disabled={discountLoading || !discountInput.trim()}
+                >
+                  {discountLoading ? '...' : 'Apply'}
+                </button>
+              </div>
+            )}
+            {discountError && <p className="discount-error" data-testid="discount-error">{discountError}</p>}
+          </div>
+
+          {discount && (
+            <div className="review-row" data-testid="review-subtotal-row">
+              <span>Subtotal</span>
+              <span>${subtotal.toFixed(2)}</span>
+            </div>
+          )}
+          {discount && (
+            <div className="review-row discount-row" data-testid="review-discount-row">
+              <span>Discount</span>
+              <span data-testid="review-discount-amount">-${discountAmount.toFixed(2)}</span>
+            </div>
+          )}
           <div className="review-total" data-testid="review-total">
             <span>Total</span>
-            <span>${total.toFixed(2)}</span>
+            <span data-testid="review-total-amount">${total.toFixed(2)}</span>
           </div>
         </div>
       </div>

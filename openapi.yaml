@@ -15,6 +15,8 @@ tags:
     description: Retrieve orders
   - name: Checkout
     description: Fake checkout and order creation
+  - name: Discounts
+    description: Validate discount codes
 
 paths:
   /api/products:
@@ -152,14 +154,41 @@ paths:
         '404':
           $ref: '#/components/responses/NotFound'
 
+  /api/discounts/validate/{code}:
+    get:
+      tags: [Discounts]
+      summary: Validate a discount code
+      operationId: validateDiscount
+      parameters:
+        - name: code
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Discount code to validate (case-insensitive)
+          example: SAVE10
+      responses:
+        '200':
+          description: Valid discount code
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Discount'
+        '404':
+          description: Invalid discount code
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
   /api/checkout:
     post:
       tags: [Checkout]
       summary: Place an order (fake checkout)
       operationId: checkout
       description: >
-        Validates cart items against current stock, simulates payment processing
-        (90% success rate), deducts stock on success, and creates an order record.
+        Validates cart items against current stock, applies optional discount code,
+        deducts stock, and creates an order record. Orders always succeed if validation passes.
       requestBody:
         required: true
         content:
@@ -172,18 +201,19 @@ paths:
                 email: jane@example.com
                 address: 123 Main St, New York 10001
               paymentMethod: credit_card
+              discountCode: SAVE10
               items:
                 - productId: 697e5563-5eed-45db-be7c-b543a102641b
                   quantity: 2
       responses:
         '201':
-          description: Order created (check paymentStatus for success/failure)
+          description: Order created
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Order'
         '400':
-          description: Empty cart, missing customer info, product not found, or insufficient stock
+          description: Empty cart, missing customer info, invalid discount code, product not found, or insufficient stock
           content:
             application/json:
               schema:
@@ -309,6 +339,27 @@ components:
           enum: [credit_card, debit_card, paypal]
           default: credit_card
           example: credit_card
+        discountCode:
+          type: string
+          example: SAVE10
+          description: Optional discount code to apply
+
+    Discount:
+      type: object
+      properties:
+        code:
+          type: string
+          example: SAVE10
+        type:
+          type: string
+          enum: [percent, flat]
+          example: percent
+        value:
+          type: number
+          example: 10
+        description:
+          type: string
+          example: 10% off your order
 
     Order:
       type: object
@@ -352,10 +403,22 @@ components:
                 type: number
                 format: float
                 example: 159.98
-        total:
+        subtotal:
           type: number
           format: float
           example: 159.98
+        discountCode:
+          type: string
+          nullable: true
+          example: SAVE10
+        discountAmount:
+          type: number
+          format: float
+          example: 16.00
+        total:
+          type: number
+          format: float
+          example: 143.98
         paymentMethod:
           type: string
           enum: [credit_card, debit_card, paypal]

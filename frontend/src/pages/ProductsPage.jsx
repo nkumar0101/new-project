@@ -7,7 +7,7 @@ import './ProductsPage.css';
 
 const CATEGORIES = ['All', 'Electronics', 'Clothing', 'Footwear', 'Kitchen', 'Books', 'Sports', 'Toys', 'General'];
 
-export default function ProductsPage({ addToCart }) {
+export default function ProductsPage({ addToCart, clearCart }) {
   const [products, setProducts] = useState([]);
   const [reviews, setReviews] = useState([]);
   const [showForm, setShowForm] = useState(false);
@@ -46,22 +46,23 @@ export default function ProductsPage({ addToCart }) {
 
   const handleSave = async (data) => {
     if (editingProduct) {
-      await api.updateProduct(editingProduct.id, data);
+      const updated = await api.updateProduct(editingProduct.id, data);
+      setProducts(prev => prev.map(p => p.id === editingProduct.id ? updated : p));
       showToast('Product updated');
     } else {
-      await api.createProduct(data);
+      const created = await api.createProduct(data);
+      setProducts(prev => [created, ...prev]);
       showToast('Product created');
     }
     setShowForm(false);
     setEditingProduct(null);
-    loadProducts();
   };
 
   const handleDelete = async (id) => {
     await api.deleteProduct(id);
+    setProducts(prev => prev.filter(p => p.id !== id));
     setDeleteConfirmProduct(null);
     showToast('Product deleted');
-    loadProducts();
   };
 
   const handleReviewClose = () => {
@@ -154,6 +155,7 @@ export default function ProductsPage({ addToCart }) {
               <button className="btn-secondary" data-testid="reset-confirm-cancel" onClick={() => setShowResetConfirm(false)}>Cancel</button>
               <button className="btn-danger" data-testid="reset-confirm-ok" onClick={async () => {
                 await api.reset();
+                clearCart();
                 setShowResetConfirm(false);
                 showToast('State reset to defaults');
                 loadProducts();
@@ -214,10 +216,15 @@ export default function ProductsPage({ addToCart }) {
 
                   <div className="product-footer">
                     <span className="product-price" data-testid={`product-price-${s}`}>${product.price.toFixed(2)}</span>
-                    <span className={`product-stock ${product.stock === 0 ? 'out' : ''}`} data-testid={`product-stock-${s}`}>
+                    <span className={`product-stock ${product.stock === 0 ? 'out' : product.stock <= 5 ? 'low' : ''}`} data-testid={`product-stock-${s}`}>
                       {product.stock === 0 ? 'Out of stock' : `${product.stock} in stock`}
                     </span>
                   </div>
+                  {product.stock > 0 && product.stock <= 5 && (
+                    <div className="low-stock-alert" data-testid={`low-stock-alert-${s}`}>
+                      Only {product.stock} left — order soon!
+                    </div>
+                  )}
                   <div className="product-actions">
                     <button
                       className="btn-primary"

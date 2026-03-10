@@ -1,0 +1,28 @@
+[
+  {
+    "Source": "192.168.65.1:39998",
+    "Destination": "localhost",
+    "RequestBody": "{\"customer\": {\"name\": \"Jane Smith\", \"email\": \"jane@example.com\", \"address\": \"123 Main St, New York 10001\"}, \"paymentMethod\": \"credit_card\", \"discountCode\": \"INVALID999\", \"items\": [{\"productId\": \"a1000000-0000-0000-0000-000000000001\", \"quantity\": 1}]}",
+    "ResponseBody": "{\"error\": \"Invalid discount code\"}",
+    "RequestHeaders": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        ""
+      ]
+    },
+    "ResponseHeaders": {
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "Method": "POST",
+    "Path": "/api/checkout",
+    "QueryParams": {},
+    "StatusCode": 400,
+    "Port": 3001,
+    "Timestamp": "2026-03-10T19:32:04.409Z",
+    "Scheme": "http"
+  }
+]

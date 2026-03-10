@@ -1,0 +1,54 @@
+[
+  {
+    "Source": "192.168.65.1:39998",
+    "Destination": "localhost",
+    "RequestBody": "",
+    "ResponseBody": "{\"code\": \"FLAT5\", \"type\": \"flat\", \"value\": 5, \"description\": \"$5 off your order\"}",
+    "RequestHeaders": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        ""
+      ]
+    },
+    "ResponseHeaders": {
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "Method": "GET",
+    "Path": "/api/discounts/validate/FLAT5",
+    "QueryParams": {},
+    "StatusCode": 200,
+    "Port": 3001,
+    "Timestamp": "2026-03-10T19:31:51.065Z",
+    "Scheme": "http"
+  },
+  {
+    "Source": "192.168.65.1:39998",
+    "Destination": "localhost",
+    "RequestBody": "{\"customer\": {\"name\": \"Jane Smith\", \"email\": \"jane@example.com\", \"address\": \"123 Main St, New York 10001\"}, \"paymentMethod\": \"credit_card\", \"discountCode\": \"FLAT5\", \"items\": [{\"productId\": \"a1000000-0000-0000-0000-000000000001\", \"quantity\": 1}]}",
+    "ResponseBody": "{\"id\": \"ord-flat5-001\", \"customer\": {\"name\": \"Jane Smith\", \"email\": \"jane@example.com\", \"address\": \"123 Main St, New York 10001\"}, \"items\": [{\"productId\": \"a1000000-0000-0000-0000-000000000001\", \"name\": \"Wireless Headphones\", \"price\": 79.99, \"quantity\": 1, \"subtotal\": 79.99}], \"subtotal\": 79.99, \"discountCode\": \"FLAT5\", \"discountAmount\": 5.00, \"total\": 74.99, \"paymentMethod\": \"credit_card\", \"paymentStatus\": \"success\", \"status\": \"confirmed\"}",
+    "RequestHeaders": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        ""
+      ]
+    },
+    "ResponseHeaders": {
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "Method": "POST",
+    "Path": "/api/checkout",
+    "QueryParams": {},
+    "StatusCode": 201,
+    "Port": 3001,
+    "Timestamp": "2026-03-10T19:32:04.403Z",
+    "Scheme": "http"
+  }
+]
