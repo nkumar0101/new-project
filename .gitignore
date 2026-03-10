@@ -4,4 +4,4 @@ frontend/dist/
 .env
 .env.local
 .vercel
-.skyramp/
+.skyramp/*.json
