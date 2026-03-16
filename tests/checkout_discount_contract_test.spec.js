@@ -69,7 +69,8 @@ test('testCheckoutPost', async () => {
         "paymentStatus": "success",
         "status": "confirmed",
         "subtotal": 159.98,
-        "total": 143.98
+        "total": 143.98,
+        "userId": "u1"
     }`;
 
     // Execute Request

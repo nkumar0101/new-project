@@ -1,0 +1,80 @@
+[
+  {
+    "Source": "192.168.65.1:39998",
+    "Destination": "localhost",
+    "RequestBody": "{\"email\": \"admin@shopeasy.com\", \"password\": \"password123\"}",
+    "ResponseBody": "{\"token\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.test\", \"user\": {\"id\": \"u1\", \"name\": \"Admin User\", \"email\": \"admin@shopeasy.com\", \"role\": \"admin\"}}",
+    "RequestHeaders": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "Bearer SKYRAMP_PLACEHOLDER_TOKEN"
+      ]
+    },
+    "ResponseHeaders": {
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "Method": "POST",
+    "Path": "/api/auth/login",
+    "QueryParams": {},
+    "StatusCode": 200,
+    "Port": 3001,
+    "Timestamp": "2026-03-16T21:13:06.947Z",
+    "Scheme": "http"
+  },
+  {
+    "Source": "192.168.65.1:39998",
+    "Destination": "localhost",
+    "RequestBody": "{\"customer\": {\"name\": \"Admin User\", \"email\": \"admin@shopeasy.com\", \"address\": \"123 Main St, New York 10001\"}, \"items\": [{\"productId\": \"a1000000-0000-0000-0000-000000000001\", \"quantity\": 1}], \"paymentMethod\": \"credit_card\"}",
+    "ResponseBody": "{\"id\": \"b2c3d4e5-f6a7-8901-bcde-f12345678901\", \"userId\": \"u1\", \"customer\": {\"name\": \"Admin User\", \"email\": \"admin@shopeasy.com\", \"address\": \"123 Main St, New York 10001\"}, \"items\": [{\"productId\": \"a1000000-0000-0000-0000-000000000001\", \"name\": \"Wireless Headphones\", \"price\": 79.99, \"quantity\": 1, \"subtotal\": 79.99}], \"subtotal\": 79.99, \"discountCode\": null, \"discountAmount\": 0, \"total\": 79.99, \"paymentMethod\": \"credit_card\", \"paymentStatus\": \"success\", \"status\": \"confirmed\", \"createdAt\": \"2026-03-16T21:13:06.947Z\"}",
+    "RequestHeaders": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "Bearer SKYRAMP_PLACEHOLDER_TOKEN"
+      ]
+    },
+    "ResponseHeaders": {
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "Method": "POST",
+    "Path": "/api/checkout",
+    "QueryParams": {},
+    "StatusCode": 201,
+    "Port": 3001,
+    "Timestamp": "2026-03-16T21:13:17.331Z",
+    "Scheme": "http"
+  },
+  {
+    "Source": "192.168.65.1:39998",
+    "Destination": "localhost",
+    "RequestBody": "",
+    "ResponseBody": "[{\"id\": \"b2c3d4e5-f6a7-8901-bcde-f12345678901\", \"userId\": \"u1\", \"customer\": {\"name\": \"Admin User\", \"email\": \"admin@shopeasy.com\", \"address\": \"123 Main St, New York 10001\"}, \"items\": [{\"productId\": \"a1000000-0000-0000-0000-000000000001\", \"name\": \"Wireless Headphones\", \"price\": 79.99, \"quantity\": 1, \"subtotal\": 79.99}], \"subtotal\": 79.99, \"total\": 79.99, \"paymentMethod\": \"credit_card\", \"paymentStatus\": \"success\", \"status\": \"confirmed\", \"createdAt\": \"2026-03-16T21:13:06.947Z\"}]",
+    "RequestHeaders": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "Bearer SKYRAMP_PLACEHOLDER_TOKEN"
+      ]
+    },
+    "ResponseHeaders": {
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "Method": "GET",
+    "Path": "/api/orders",
+    "QueryParams": {},
+    "StatusCode": 200,
+    "Port": 3001,
+    "Timestamp": "2026-03-16T21:13:23.642Z",
+    "Scheme": "http"
+  }
+]

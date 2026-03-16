@@ -67,6 +67,7 @@ router.post('/', (req, res) => {
 
   const order = {
     id: uuidv4(),
+    userId: req.user.id,
     customer,
     items: orderItems,
     subtotal: parseFloat(subtotal.toFixed(2)),
