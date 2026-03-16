@@ -1,4 +1,4 @@
 #!/bin/bash
 # App is deployed on Vercel — no local service startup needed.
 # Output the base URL so testbot knows where to run tests against.
-echo '{"base_url": "https://new-project-nkumar0101s-projects.vercel.app"}'
+echo "https://new-project-nkumar0101s-projects.vercel.app"
