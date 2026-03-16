@@ -1,14 +1,38 @@
 import React, { useState } from 'react';
-import { Routes, Route, NavLink } from 'react-router-dom';
+import { Routes, Route, NavLink, Navigate, useLocation } from 'react-router-dom';
 import ProductsPage from './pages/ProductsPage';
 import CartPage from './pages/CartPage';
 import CheckoutPage from './pages/CheckoutPage';
 import OrdersPage from './pages/OrdersPage';
 import OrderDetailPage from './pages/OrderDetailPage';
+import LoginPage from './pages/LoginPage';
 import './App.css';
+
+function ProtectedRoute({ children }) {
+  const token = localStorage.getItem('token');
+  const location = useLocation();
+  if (!token) return <Navigate to="/login" state={{ from: location }} replace />;
+  return children;
+}
 
 export default function App() {
   const [cart, setCart] = useState([]);
+  const [user, setUser] = useState(() => {
+    try { return JSON.parse(localStorage.getItem('user')); } catch { return null; }
+  });
+
+  const handleLogin = (token, userData) => {
+    localStorage.setItem('token', token);
+    localStorage.setItem('user', JSON.stringify(userData));
+    setUser(userData);
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+    setUser(null);
+    setCart([]);
+  };
 
   const addToCart = (product, quantity = 1) => {
     setCart(prev => {
@@ -36,6 +60,14 @@ export default function App() {
 
   const cartCount = cart.reduce((sum, i) => sum + i.quantity, 0);
 
+  if (!user) {
+    return (
+      <Routes>
+        <Route path="*" element={<LoginPage onLogin={handleLogin} />} />
+      </Routes>
+    );
+  }
+
   return (
     <div className="app" data-testid="app">
       <header className="header" data-testid="header">
@@ -51,17 +83,20 @@ export default function App() {
             <NavLink to="/cart" className={({ isActive }) => isActive ? 'nav-link cart-link active' : 'nav-link cart-link'} data-testid="nav-cart">
               Cart {cartCount > 0 && <span className="cart-badge" data-testid="cart-badge">{cartCount}</span>}
             </NavLink>
+            <span className="nav-user" data-testid="nav-user">{user.name}</span>
+            <button className="logout-btn" data-testid="logout-btn" onClick={handleLogout}>Sign out</button>
           </nav>
         </div>
       </header>
 
       <main className="main" data-testid="main">
         <Routes>
-          <Route path="/" element={<ProductsPage addToCart={addToCart} clearCart={clearCart} />} />
-          <Route path="/cart" element={<CartPage cart={cart} updateCartItem={updateCartItem} />} />
-          <Route path="/checkout" element={<CheckoutPage cart={cart} clearCart={clearCart} />} />
-          <Route path="/orders" element={<OrdersPage />} />
-          <Route path="/orders/:id" element={<OrderDetailPage />} />
+          <Route path="/login" element={<Navigate to="/" replace />} />
+          <Route path="/" element={<ProtectedRoute><ProductsPage addToCart={addToCart} clearCart={clearCart} /></ProtectedRoute>} />
+          <Route path="/cart" element={<ProtectedRoute><CartPage cart={cart} updateCartItem={updateCartItem} /></ProtectedRoute>} />
+          <Route path="/checkout" element={<ProtectedRoute><CheckoutPage cart={cart} clearCart={clearCart} /></ProtectedRoute>} />
+          <Route path="/orders" element={<ProtectedRoute><OrdersPage /></ProtectedRoute>} />
+          <Route path="/orders/:id" element={<ProtectedRoute><OrderDetailPage /></ProtectedRoute>} />
         </Routes>
       </main>
     </div>

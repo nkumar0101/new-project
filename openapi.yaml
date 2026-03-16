@@ -9,6 +9,8 @@ servers:
     description: Production
 
 tags:
+  - name: Auth
+    description: Authentication
   - name: Products
     description: Create, read, update, and delete products
   - name: Orders
@@ -18,7 +20,64 @@ tags:
   - name: Discounts
     description: Validate discount codes
 
+security:
+  - bearerAuth: []
+
 paths:
+  /api/auth/login:
+    post:
+      tags: [Auth]
+      summary: Login
+      operationId: login
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [email, password]
+              properties:
+                email:
+                  type: string
+                  format: email
+                  example: user@shopeasy.com
+                password:
+                  type: string
+                  example: password123
+      responses:
+        '200':
+          description: Login successful
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+                  user:
+                    type: object
+                    properties:
+                      id: { type: string }
+                      name: { type: string }
+                      email: { type: string }
+                      role: { type: string }
+        '401':
+          description: Invalid credentials
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /api/auth/logout:
+    post:
+      tags: [Auth]
+      summary: Logout
+      operationId: logout
+      responses:
+        '200':
+          description: Logged out successfully
+
   /api/products:
     get:
       tags: [Products]
@@ -237,6 +296,12 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
+
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
 
   schemas:
     Product:
