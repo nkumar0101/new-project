@@ -20,10 +20,11 @@ jobs:
         with:
           fetch-depth: 0
 
-      - uses: skyramp/testbot@shiny/test-recom-update
+      - uses: skyramp/testbot@SKYR-3625
         with:
           skyramp_license_file: ${{ secrets.SKYRAMP_LICENSE }}
           anthropic_api_key: ${{ secrets.SKYRAMP_TESTBOT_API_KEY }}
           skip_target_setup: 'true'
           test_directory: 'tests'
           skyramp_mcp_version: next
+          skyramp_executor_version: v1.3.13
