@@ -1,0 +1,54 @@
+[
+  {
+    "Source": "192.168.65.1:39998",
+    "Destination": "localhost",
+    "RequestBody": "{\"email\": \"admin@shopeasy.com\", \"password\": \"password123\"}",
+    "ResponseBody": "{\"token\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.example\", \"user\": {\"id\": \"u1\", \"name\": \"Admin User\", \"email\": \"admin@shopeasy.com\", \"role\": \"admin\"}}",
+    "RequestHeaders": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "Bearer SKYRAMP_PLACEHOLDER_TOKEN"
+      ]
+    },
+    "ResponseHeaders": {
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "Method": "POST",
+    "Path": "/api/auth/login",
+    "QueryParams": {},
+    "StatusCode": 200,
+    "Port": 3001,
+    "Timestamp": "2026-03-16T18:42:40.857Z",
+    "Scheme": "http"
+  },
+  {
+    "Source": "192.168.65.1:39998",
+    "Destination": "localhost",
+    "RequestBody": "",
+    "ResponseBody": "[{\"id\": \"ord-001\", \"status\": \"confirmed\", \"total\": 143.98, \"customer\": {\"name\": \"Jane Smith\", \"email\": \"jane@example.com\"}, \"items\": [{\"productId\": \"a1000000-0000-0000-0000-000000000001\", \"quantity\": 1, \"price\": 79.99}]}]",
+    "RequestHeaders": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "Bearer SKYRAMP_PLACEHOLDER_TOKEN"
+      ]
+    },
+    "ResponseHeaders": {
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "Method": "GET",
+    "Path": "/api/orders",
+    "QueryParams": {},
+    "StatusCode": 200,
+    "Port": 3001,
+    "Timestamp": "2026-03-16T18:42:46.636Z",
+    "Scheme": "http"
+  }
+]
