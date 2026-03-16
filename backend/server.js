@@ -4,6 +4,8 @@ const productsRouter = require('./routes/products');
 const ordersRouter = require('./routes/orders');
 const checkoutRouter = require('./routes/checkout');
 const discountsRouter = require('./routes/discounts');
+const authRouter = require('./routes/auth');
+const { authMiddleware } = require('./middleware/auth');
 const { resetStore } = require('./store');
 
 const app = express();
@@ -11,12 +13,16 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-app.use('/api/products', productsRouter);
-app.use('/api/orders', ordersRouter);
-app.use('/api/checkout', checkoutRouter);
-app.use('/api/discounts', discountsRouter);
+// Public routes
+app.use('/api/auth', authRouter);
 
-app.post('/api/reset', (req, res) => {
+// Protected routes
+app.use('/api/products', authMiddleware, productsRouter);
+app.use('/api/orders', authMiddleware, ordersRouter);
+app.use('/api/checkout', authMiddleware, checkoutRouter);
+app.use('/api/discounts', authMiddleware, discountsRouter);
+
+app.post('/api/reset', authMiddleware, (req, res) => {
   resetStore();
   res.json({ message: 'Store reset to seed data' });
 });
