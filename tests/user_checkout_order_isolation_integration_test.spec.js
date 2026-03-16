@@ -87,5 +87,10 @@ test('testIntegration', async () => {
 
     // Generated Assertions
     assert.strictEqual(ordersGetResponse.statusCode, 200, 'status code');
+    const ordersResponse = JSON.parse(ordersGetResponse.responseBody);
+    assert.ok(Array.isArray(ordersResponse.orders), 'orders field should be an array');
+    assert.ok(typeof ordersResponse.total === 'number', 'total should be a number');
+    assert.ok(typeof ordersResponse.page === 'number', 'page should be a number');
+    assert.ok(typeof ordersResponse.limit === 'number', 'limit should be a number');
 });
 
