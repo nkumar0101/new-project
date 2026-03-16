@@ -26,7 +26,7 @@ jobs:
           anthropic_api_key: ${{ secrets.SKYRAMP_TESTBOT_API_KEY }}
           target_setup_command: './scripts/testbot-target-setup.sh'
           auth_token_command: >
-            curl -s -X POST https://new-project-nkumar0101s-projects.vercel.app/api/auth/login
+            curl -s -X POST https://new-project-git-nk-testbot-nkumar0101s-projects.vercel.app/api/auth/login
             -H "Content-Type: application/json"
             -d '{"email":"admin@shopeasy.com","password":"password123"}'
             | jq -r '.token'
