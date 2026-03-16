@@ -13,12 +13,17 @@ export default function LoginPage({ onLogin }) {
     e.preventDefault();
     setError('');
     setLoading(true);
-    const res = await api.login(form);
-    setLoading(false);
-    if (res.error) {
-      setError(res.error);
-    } else {
-      onLogin(res.token, res.user);
+    try {
+      const res = await api.login(form);
+      if (res.error) {
+        setError(res.error);
+      } else {
+        onLogin(res.token, res.user);
+      }
+    } catch (err) {
+      setError('Unable to connect. Please try again.');
+    } finally {
+      setLoading(false);
     }
   };
 
