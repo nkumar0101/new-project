@@ -1,0 +1,54 @@
+[
+  {
+    "Source": "192.168.65.1:39998",
+    "Destination": "localhost",
+    "RequestBody": "{\"email\": \"user@shopeasy.com\", \"password\": \"password123\"}",
+    "ResponseBody": "{\"token\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.example\", \"user\": {\"id\": \"u2\", \"name\": \"Demo User\", \"email\": \"user@shopeasy.com\", \"role\": \"user\"}}",
+    "RequestHeaders": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "Bearer SKYRAMP_PLACEHOLDER_TOKEN"
+      ]
+    },
+    "ResponseHeaders": {
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "Method": "POST",
+    "Path": "/api/auth/login",
+    "QueryParams": {},
+    "StatusCode": 200,
+    "Port": 3001,
+    "Timestamp": "2026-03-16T17:36:26.603Z",
+    "Scheme": "http"
+  },
+  {
+    "Source": "192.168.65.1:39998",
+    "Destination": "localhost",
+    "RequestBody": "",
+    "ResponseBody": "[{\"id\": \"a1000000-0000-0000-0000-000000000001\", \"name\": \"Wireless Headphones\", \"price\": 79.99, \"category\": \"Electronics\", \"stock\": 50}]",
+    "RequestHeaders": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "Bearer SKYRAMP_PLACEHOLDER_TOKEN"
+      ]
+    },
+    "ResponseHeaders": {
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "Method": "GET",
+    "Path": "/api/products",
+    "QueryParams": {},
+    "StatusCode": 200,
+    "Port": 3001,
+    "Timestamp": "2026-03-16T17:36:32.091Z",
+    "Scheme": "http"
+  }
+]

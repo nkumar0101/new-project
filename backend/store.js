@@ -1,6 +1,11 @@
 // In-memory data store
 const { v4: uuidv4 } = require('uuid');
 
+const USERS = [
+  { id: 'u1', name: 'Admin User',  email: 'admin@shopeasy.com', password: 'password123', role: 'admin' },
+  { id: 'u2', name: 'Demo User',   email: 'user@shopeasy.com',  password: 'password123', role: 'user'  },
+];
+
 // Static UUIDs for seed products so all serverless instances share the same IDs
 const SEED_IDS = [
   'a1000000-0000-0000-0000-000000000001',
@@ -78,4 +83,4 @@ const resetStore = () => {
   store.discounts = seed.discounts;
 };
 
-module.exports = { store, uuidv4, resetStore };
+module.exports = { store, uuidv4, resetStore, USERS };
