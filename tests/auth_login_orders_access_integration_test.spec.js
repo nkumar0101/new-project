@@ -58,5 +58,10 @@ test('testIntegration', async () => {
 
     // Generated Assertions
     assert.strictEqual(ordersGetResponse.statusCode, 200, 'status code');
+    const orders = JSON.parse(ordersGetResponse.responseBody);
+    assert.ok(Array.isArray(orders), 'response should be an array');
+    orders.forEach(order => {
+        assert.strictEqual(order.userId, 'u1', 'each order should belong to the logged-in user');
+    });
 });
 
