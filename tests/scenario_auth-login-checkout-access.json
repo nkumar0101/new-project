@@ -1,0 +1,54 @@
+[
+  {
+    "Source": "192.168.65.1:39998",
+    "Destination": "new-project-git-nk-testbot-nkumar0101s-projects.vercel.app",
+    "RequestBody": "{\"email\": \"admin@shopeasy.com\", \"password\": \"password123\"}",
+    "ResponseBody": "{\"token\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.sample\", \"user\": {\"id\": \"u1\", \"name\": \"Admin User\", \"email\": \"admin@shopeasy.com\", \"role\": \"admin\"}}",
+    "RequestHeaders": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "Bearer SKYRAMP_PLACEHOLDER_TOKEN"
+      ]
+    },
+    "ResponseHeaders": {
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "Method": "POST",
+    "Path": "/api/auth/login",
+    "QueryParams": {},
+    "StatusCode": 200,
+    "Port": 443,
+    "Timestamp": "2026-03-16T20:26:43.322Z",
+    "Scheme": "https"
+  },
+  {
+    "Source": "192.168.65.1:39998",
+    "Destination": "new-project-git-nk-testbot-nkumar0101s-projects.vercel.app",
+    "RequestBody": "{\"items\": [{\"productId\": \"a1000000-0000-0000-0000-000000000001\", \"quantity\": 1}], \"customer\": {\"name\": \"Admin User\", \"email\": \"admin@shopeasy.com\"}, \"paymentMethod\": \"credit_card\"}",
+    "ResponseBody": "{\"id\": \"order-uuid-001\", \"customer\": {\"name\": \"Admin User\", \"email\": \"admin@shopeasy.com\"}, \"items\": [{\"productId\": \"a1000000-0000-0000-0000-000000000001\", \"name\": \"Wireless Headphones\", \"price\": 79.99, \"quantity\": 1, \"subtotal\": 79.99}], \"subtotal\": 79.99, \"discountCode\": null, \"discountAmount\": 0, \"total\": 79.99, \"paymentMethod\": \"credit_card\", \"paymentStatus\": \"success\", \"status\": \"confirmed\", \"createdAt\": \"2026-03-16T20:00:00.000Z\"}",
+    "RequestHeaders": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "Bearer SKYRAMP_PLACEHOLDER_TOKEN"
+      ]
+    },
+    "ResponseHeaders": {
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "Method": "POST",
+    "Path": "/api/checkout",
+    "QueryParams": {},
+    "StatusCode": 201,
+    "Port": 443,
+    "Timestamp": "2026-03-16T20:26:55.246Z",
+    "Scheme": "https"
+  }
+]

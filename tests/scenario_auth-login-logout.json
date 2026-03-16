@@ -1,0 +1,54 @@
+[
+  {
+    "Source": "192.168.65.1:39998",
+    "Destination": "new-project-git-nk-testbot-nkumar0101s-projects.vercel.app",
+    "RequestBody": "{\"email\": \"user@shopeasy.com\", \"password\": \"password123\"}",
+    "ResponseBody": "{\"token\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.sample\", \"user\": {\"id\": \"u2\", \"name\": \"Demo User\", \"email\": \"user@shopeasy.com\", \"role\": \"user\"}}",
+    "RequestHeaders": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "Bearer SKYRAMP_PLACEHOLDER_TOKEN"
+      ]
+    },
+    "ResponseHeaders": {
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "Method": "POST",
+    "Path": "/api/auth/login",
+    "QueryParams": {},
+    "StatusCode": 200,
+    "Port": 443,
+    "Timestamp": "2026-03-16T20:26:43.329Z",
+    "Scheme": "https"
+  },
+  {
+    "Source": "192.168.65.1:39998",
+    "Destination": "new-project-git-nk-testbot-nkumar0101s-projects.vercel.app",
+    "RequestBody": "{}",
+    "ResponseBody": "{\"message\": \"Logged out successfully\"}",
+    "RequestHeaders": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "Authorization": [
+        "Bearer SKYRAMP_PLACEHOLDER_TOKEN"
+      ]
+    },
+    "ResponseHeaders": {
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "Method": "POST",
+    "Path": "/api/auth/logout",
+    "QueryParams": {},
+    "StatusCode": 200,
+    "Port": 443,
+    "Timestamp": "2026-03-16T20:26:55.250Z",
+    "Scheme": "https"
+  }
+]
