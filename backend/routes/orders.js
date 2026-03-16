@@ -2,9 +2,9 @@ const express = require('express');
 const router = express.Router();
 const { store } = require('../store');
 
-// GET all orders
+// GET orders for the logged-in user
 router.get('/', (req, res) => {
-  res.json(store.orders);
+  res.json(store.orders.filter(o => o.userId === req.user.id));
 });
 
 // GET single order
