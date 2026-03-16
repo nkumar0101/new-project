@@ -2,9 +2,18 @@ const express = require('express');
 const router = express.Router();
 const { store } = require('../store');
 
-// GET orders for the logged-in user
+// GET orders for the logged-in user (paginated)
 router.get('/', (req, res) => {
-  res.json(store.orders.filter(o => o.userId === req.user.id));
+  const page = Math.max(1, parseInt(req.query.page) || 1);
+  const limit = Math.min(100, Math.max(1, parseInt(req.query.limit) || 10));
+  const userOrders = store.orders.filter(o => o.userId === req.user.id);
+  const start = (page - 1) * limit;
+  res.json({
+    orders: userOrders.slice(start, start + limit),
+    total: userOrders.length,
+    page,
+    limit,
+  });
 });
 
 // GET single order
